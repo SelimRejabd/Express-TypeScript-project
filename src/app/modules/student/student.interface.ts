@@ -1,19 +1,19 @@
-export type UserName = {
+export type TUserName = {
   firstName: string;
   middleName: string;
   lastName: string;
 };
 
-export type Guardian = {
+export type TGuardian = {
   fatherName: string;
   fatherContact: string;
   motherName: string;
   motherContact: string;
 };
 
-export type Student = {
+export type TStudent = {
   id: string;
-  name: UserName;
+  name: TUserName;
   gender: "male" | "female";
   dateOfBirth: string;
   email: string;
@@ -22,8 +22,8 @@ export type Student = {
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   presentAddress: string;
   permanentAddress: string;
-  guardian: Guardian;
-  localGuardian: Guardian;
+  guardian: TGuardian;
+  localGuardian: TGuardian;
   profileImage?: string;
   isActive: "active" | "blocked";
 };
