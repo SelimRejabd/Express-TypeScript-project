@@ -86,4 +86,5 @@ export const StudentValidationSchema = z.object({
       message: "Profile Image must be a valid URL.",
     }),
   isActive: z.enum(["active", "blocked"]).optional().default("active"),
+  isDeleted: z.boolean().optional().default(false)
 });
