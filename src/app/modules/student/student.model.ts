@@ -34,7 +34,7 @@ const UserNameSchema = new Schema<TUserName>({
       validator: (value: string) => validator.isAlpha(value, "en-US"),
       message: "{VALUE} contains invalid characters. Only letters are allowed.",
     },
-  },
+  }
 });
 
 const guardianSchema = new Schema<TGuardian>({
@@ -105,7 +105,7 @@ export const studentSchema = new Schema<TStudent, StudentModel>({
   },
   name: {
     type: UserNameSchema,
-    required: [true, "Name is required."],
+    required: [true, "Name is required."], 
   },
   gender: {
     type: String,
@@ -169,6 +169,10 @@ export const studentSchema = new Schema<TStudent, StudentModel>({
       validator: (value: string) => validator.isURL(value),
       message: "{VALUE} is not a valid URL.",
     },
+  },
+  admissionSemester : {
+    type : Schema.Types.ObjectId,
+    ref : 'AcademicSemester'
   },
   isDeleted: {
     type: Boolean,

@@ -23,7 +23,7 @@ const UserNameValidationSchema = z.object({
     .refine(
       (value) => /^[A-Za-z]+$/.test(value),
       "Last Name contains invalid characters. Only letters are allowed."
-    ),
+    )
 });
 
 // Zod Schema for Guardian
@@ -56,7 +56,7 @@ const CreateStudentValidationSchema = z.object({
         errorMap: () => ({ message: "Gender is not valid." }),
       }),
       dateOfBirth: z
-        .date().optional(),
+        .string().optional(),
       email: z
         .string()
         .min(1, "Email is required.")
@@ -90,6 +90,7 @@ const CreateStudentValidationSchema = z.object({
         .refine((value) => !value || /^https?:\/\/[^\s]+$/.test(value), {
           message: "Profile Image must be a valid URL.",
         }),
+        admissionSemester : z.string()
     }),
   }),
 });
