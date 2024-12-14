@@ -1,36 +1,60 @@
+import mongoose from "mongoose";
 import { Student } from "./student.model";
-
-// const createStudentIntoDB = async (studentData: TStudent) => {
-//   if (await Student.isUserExists(studentData.id)) {
-//     throw new Error("User already exist with this id.");
-//   }
-
-//   const result = await Student.create(studentData);
-
-//   // const student = new Student(studentData);
-//   // if(await student.isUserExists(studentData.id)){
-//   //   throw new Error('User already exist with this id.');
-//   // }
-//   // const result = await student.save();
-
-//   return result;
-// };
+import AppError from "../../errors/AppError";
+import { User } from "../user/user.model";
 
 const getAllStudentsFromDB = async () => {
-  const result = await Student.find();
+  const result = await Student.find().populate("admissionSemester").populate({
+    path: "academicDepartment",
+    populate: "academicFaculty",
+  });
   return result;
 };
 
 const getStudentByIdFromDB = async (id: string) => {
-  const result = await Student.findOne({ id: id });
+  const result = await Student.findOne({ id: id })
+    .populate("admissionSemester")
+    .populate({
+      path: "academicDepartment",
+      populate: "academicFaculty",
+    });
   return result;
 };
 
 const deleteStudentFromDB = async (id: string) => {
-  if (await Student.isUserExists(id)) {
-    const result = await Student.updateOne({ id }, { isDeleted: true });
-    return result;
-  } else throw new Error("User not exist with this id.");
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    if (await Student.isUserExists(id)) {
+      const deletedStudent = await Student.findOneAndUpdate(
+        { id },
+        { isDeleted: true },
+        { new: true }
+      );
+
+      if (!deletedStudent) {
+        throw new AppError(500, "Failed to delete student");
+      }
+
+      const deletedUser = await User.findOneAndUpdate(
+        { id },
+        { isDeleted: true },
+        { new: true }
+      );
+
+      if (!deletedUser) {
+        throw new AppError(500, "Failed to delete user");
+      }
+
+      await session.commitTransaction();
+    } else throw new Error("User not exist with this id.");
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
 };
 
 export const StudentServices = {

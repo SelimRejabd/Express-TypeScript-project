@@ -90,7 +90,8 @@ const CreateStudentValidationSchema = z.object({
         .refine((value) => !value || /^https?:\/\/[^\s]+$/.test(value), {
           message: "Profile Image must be a valid URL.",
         }),
-        admissionSemester : z.string()
+        admissionSemester : z.string(),
+        academicDepartment : z.string()
     }),
   }),
 });
