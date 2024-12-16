@@ -8,7 +8,7 @@ const notFound = (
   ) => {
     res.status(404).json({
       success: false,
-      message: "Not Found",
+      message: "API Not Found",
       error : ''
     });
   };
