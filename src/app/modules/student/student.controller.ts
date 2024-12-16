@@ -2,10 +2,8 @@ import { StudentServices } from "./student.service";
 import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
 
-
 const getAllStudents = catchAsync(async (req, res) => {
-  const result = await StudentServices.getAllStudentsFromDB();
-
+  const result = await StudentServices.getAllStudentsFromDB(req.query);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -26,7 +24,7 @@ const getStudentById = catchAsync(async (req, res) => {
   });
 });
 
-const deleteStudent= catchAsync(async (req, res) => {
+const deleteStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await StudentServices.deleteStudentFromDB(studentId);
 
@@ -38,10 +36,13 @@ const deleteStudent= catchAsync(async (req, res) => {
   });
 });
 
-const udpateStudent = catchAsync(async (req, res)=>{
+const udpateStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
-  const {studentData} = req.body;
-  const result = await StudentServices.updateStudentIntoDB(studentId, studentData);
+  const { studentData } = req.body;
+  const result = await StudentServices.updateStudentIntoDB(
+    studentId,
+    studentData
+  );
 
   sendResponse(res, {
     statusCode: 200,
@@ -49,11 +50,11 @@ const udpateStudent = catchAsync(async (req, res)=>{
     message: "Student is updated.",
     data: result,
   });
-})
+});
 
 export const StudentControllers = {
   getAllStudents,
   getStudentById,
   deleteStudent,
-  udpateStudent
+  udpateStudent,
 };
