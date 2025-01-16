@@ -13,4 +13,14 @@ router.post(
 
 router.get("/", OfferedCourseControllers.getAllOfferedCourses);
 
+router.get("/:id", OfferedCourseControllers.getSingleOfferedCourse);
+
+router.patch(
+  "/udpate/:id",
+  validateRequest(OfferedCourseValidations.updateOfferedCourseValidationSchema),
+  OfferedCourseControllers.udpateOfferedCourse
+);
+
+router.delete("/delete/:id", OfferedCourseControllers.deleteOfferedCourse);
+
 export const OfferedCourseRoutes = router;
